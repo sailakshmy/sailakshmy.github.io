@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>JS Drum kit</title>
+    <link rel="stylesheet" href="C:\Users\Sai Lakshmy\source\repos\My JS Drum Kit\styles.css"/>
+</head>
+<body>
+    <div class="keys">
+        <div data-key="81" class="key">
+            <kbd>Q</kbd>
+            <span class="sound"> tink </span>
+        </div>
+        <div data-key="87" class="key">
+            <kbd> W </kbd>
+            <span class="sound"> tom </span>
+        </div>
+        <div data-key="69" class="key">
+            <kbd> E </kbd>
+            <span class="sound"> snare </span>
+        </div>
+        <div data-key="82" class="key">
+            <kbd>R</kbd>
+            <span class="sound"> ride </span>
+        </div>
+        <div data-key="84" class="key">
+            <kbd>T </kbd>
+            <span class="sound">boom </span>
+        </div>
+        <div data-key="89" class="key">
+            <kbd>Y</kbd>
+            <span class="sound">openhat </span>
+        </div>
+        <div data-key="74" class="key">
+            <kbd>J</kbd>
+            <span class="sound">kick</span>
+        </div>
+        <div data-key="75" class="key">
+            <kbd>K</kbd>
+            <span class="sound">hihat</span>
+        </div>
+        <div data-key="76" class="key">
+            <kbd>L</kbd>
+            <span class="sound"> clap </span>
+        </div>
+    </div>
+    <audio data-key="81" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\tink.wav"></audio>
+    <audio data-key="87" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\tom.wav"></audio>
+    <audio data-key="69" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\snare.wav"></audio>
+    <audio data-key="82" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\ride.wav"></audio>
+    <audio data-key="84" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\boom.wav"></audio>
+    <audio data-key="89" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\openhat.wav"></audio>
+    <audio data-key="74" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\kick.wav"></audio>
+    <audio data-key="75" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\hihat.wav"></audio>
+    <audio data-key="76" src="C:\Users\Sai Lakshmy\Documents\CodeBase\JavaScript30\01 - JavaScript Drum Kit\sounds\clap.wav"></audio>
+    <script>
+        //Script to handle keyboard event
+        window.addEventListener('keydown', playSound);
+        const keys = Array.from(document.querySelectorAll('.key')); // fetches all the keys in the document
+        keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+        function playSound(e) {//Function to play the sound
+           // keyCode is the number value of the key that is pressed on the keyboard
+            const key = document.querySelector(`div[data-key= "${e.keyCode}"]`);//Fetching the div of the key that is pressed to add an animation to the specific div
+            const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);// Fetching the audio associated with the key that is pressed
+
+            if (!audio) return;//In case there is no audio associated with the pressed key.
+
+            key.classList.add('playing');// classList property returns the class name of an element as a DOMTokenList object
+            /* Property is useful to add, remove and toggle classes.
+             * it is readOnly, but can be modifies using add and remove*/
+
+            audio.currentTime = 0;//rewinds to the start everytime the key is pressed. Helpful when you want to press the same key repeatedly
+            audio.play();
+
+            /* When a key is pressed on the keyboard, then the corresponding audio gets played and the black boarder around the specific div gets changed and there will be no border
+             around the div after the audio gets played. To bring back the original border, we have to remobve the playing class from the div, by removing the transition property*/
+
+        }
+        function removeTransition(e) {
+            if (e.propertyName !== 'transform') return;
+            e.target.classList.remove('playing');
+        }
+
+    </script>
+
+</body>
+
+</html>
