@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>My JavaScript clock</title>
+</head>
+<body>
+    <div class ="clock">
+        <div class="clock_face">
+            <div class= "hand second_hand"></div>
+            <div class= "hand minute_hand"></div>
+            <div class= "hand hour_hand"></div>
+        </div>
+    </div>
+    <style>
+        html{
+            background: #0094ff url("http://unsplash.it/1500/1000?image=881&blur=5");
+            background-size: cover;
+            text-align: center;
+
+
+        }
+        body{
+            margin: 0;
+            display: flex;
+            flex: 1;
+            min-height: 100vh;
+            align-items: center;
+
+
+        }
+
+        .clock{
+            width: 30rem;
+            height: 30rem;
+            border: 20px solid white;
+            border-radius: 50%;
+            margin: 50px auto;
+            padding: 2rem;
+            position: relative;
+           /* box-shadow: 
+                0 0 0 4px rgba(0,0,0,0.1),
+                inset 0 0 0 3px white,
+                inset 0 0 10px black,
+                0 0 10px rgba(0,0,0,0.2);*/
+
+        }
+        .clock_face{
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform: translateY(-3px);
+
+        }
+        .hand{
+            width: 50%;
+            height: 6px;
+            background: black;
+            position: absolute;
+            top: 50%;
+            /*transform: rotate(20deg); - This will rotate the hand only by the middle of its axis.
+                For this program, we want it to rotate at the middle of the clock. So we use the 
+                transform-origin property. Default value is 50%.
+            */
+            transform-origin: 100%;
+            transform: rotate(90deg); /*This will rotate the element by 90 degrees so that the clock starts at 12*/
+            transition: all 0.05s;
+            transition-timing-function: cubic-bezier(0.69, -0.1, 0.58, 1);
+        }
+
+    </style>
+    <script>
+        const hourHand = document.querySelector('.hour_hand');//Fetches the hour hand
+        const minuteHand = document.querySelector('.minute_hand');//Fetches the minute hand of the clock
+        const secondHand = document.querySelector('.second_hand');//Fetches the second hand of the clock
+        function setDate() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+           // console.log(seconds);
+            const secondsDegree = ((seconds / 60) * 360) + 90;// Takes the seconds value and then converts it to degree equivalent.(/60 because there are 60seconds in a minute. *360 because one full rotation + 90 degreesto offset it be 90 degrees.)
+            secondHand.style.transform = `rotate(${secondsDegree}deg)`; //Applies the rotate style to the second-hand
+
+            const minutes = now.getMinutes();
+            console.log(minutes); 
+            const minutesDegrees = ((minutes / 60) * 360) + 90; // Takes the minutes value and then converts it to degrees (/60 because there are 60 minutes in an hour)
+            minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+            const hours = now.getHours();
+            console.log(hours);
+            const hourDegrees = ((hours / 12) * 360) + 90;// ?12 hours because this clock is 12 hour clock
+            hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+
+
+
+        }
+        setInterval(setDate, 1000); //To run the setDate() every second.
+    </script>
+</body> 
+</html>
