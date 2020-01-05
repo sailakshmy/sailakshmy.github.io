@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+    <h2> Update CSS variables with <span class="hl">JS</span></h2>
+    <div class="notes">
+        <p> CSS variables can be updated with JS - This means that when you update a CSS variable,
+        all the references to that variables will update itself.<br />
+        Although variables are used in SASS, they are defined at compile time and these cannot be changed<br />
+        CSS variables are usually declared with the default values in some type of element. Here we have declared it on Root element.</p>
+    </div>
+    <div class="controls">
+        <label for="spacing">Spacing:</label>
+        <!-- the data attribute is a made-up attribute. We just add the data- prefix before the attribute-->
+        <input id="spacing" name="spacing" type="range" min="10" max="200" value="10" data-type="px">
+        <br>
+        <label for="blur">Blur: </label>
+        <input type="range" id="blur" name="blur" min="0" max="25" value="10" data-type="px" />
+        <br />
+        <label for="base">Base Color: </label>
+        <input id="base" name="base" type="color" value="#ffc600" />
+        <br />
+    </div>
+
+    <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+    
+    <style>
+        /* CSS variables start here*/
+        :root{ /*This contains the default values of the CSS variables */
+            --base: #ffc600;
+            --spacing: 10px;
+            --blur: 10px;
+        }
+        img{
+            padding: var(--spacing);
+            background: var(--base);
+            filter: blur(var(--blur));
+
+        }
+        .hl{
+            color: var(--base);
+        }
+
+        /*These are element Styles. Not really related to CSS variables*/
+        body{
+            text-align: center;
+            background: #193549;
+            color: white;
+            font-family: "helvetica neue", sans-serif;
+            font-weight: 100;
+           
+        }
+
+        .controls{
+            margin-bottom: 50px;
+        }
+
+        input{
+            width: 100px;
+        }
+
+    </style>
+    <script>
+        //Step-1:- select the inputs from the page
+        const inputs = document.querySelectorAll('.controls input');
+        /* querySelectorAll gives a NodeList - This looks like an array, has square brackets, indexed items and all that,
+         but it is not an array. 
+         Difference between NodeList and Array is that - Array has all kinds of methods such as map(), reduce()
+         If you open the prototype for a NodeList, it has only a few methods, such as entries(), forEach(), keys(), values().*/
+        /*In order to loop over the items in a NodeList, use the forEach() */
+
+        //Step-2:- Handling the update Function
+        function handleUpdate() {
+            /*1) We need to figure out what is the type of the value that we are going to change. 
+             For eg:- base doesn't have a suffix, but blur and spacing have a suufix of px.*/
+            const suffix = this.dataset.type || ''; // The || "" will be useful when there is no value for datset.type
+        /* dataset is an object that will contain the data attributes from that specific elements*/
+        /* 2) Update the actual variable. We have to select the entire document.*/
+            console.log(this.name);
+            document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+        }
+        //Step-3:- Listen for a change event on each of the inputs
+        /* The change event will occur when there is a change in value.*/
+        inputs.forEach(input => input.addEventListener('change', handleUpdate));
+        /* If you want a value to be considered whenenevr you scroll the slider from left to right
+         * add an EventListener for mousemove event also.*/
+        inputs.forEach(input => input.addEventListener('mousemove', handleUpdate));
+
+    </script>
+</body>
+</html>
