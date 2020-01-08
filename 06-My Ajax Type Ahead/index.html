@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Type Ahead</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <form class="search-form">
+        <input type="text" class="search" placeholder="City or State" />
+        <ul class="suggestions">
+            <li>Filter for a city</li>
+            <li>or a state</li>
+        </ul>
+    </form>
+    <script>
+        const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+        /*Step-1:- Fetch the data */
+        const cities = []; // Empty array to put the cities(from the URL) into
+        /*const prom = fetch(endpoint);
+        console.log(prom);// Fetch API returns a promise, So, we usually use fetch as shown below*/
+        fetch(endpoint)
+            .then(blob => blob.json())/*this is the data returned by Fetch API.We are parsing it to json
+             * using the .json() method, which inturn returns another promise*/
+            /* .then(data => console.log(data)); - Doing this will give us the data in the form of an array
+             * but we need to put this data into the cities Array. We can do this using 
+             * 1) the spread operator
+             * 2) declaring cities using the let keyword.*/
+            .then(data => cities.push(...data));
+
+        /*Step-2:- Filter the array data into a subset that matches either the city name or state name*/
+
+        function findMatches(wordToMatch, cities) {
+          return  cities.filter(place => {
+            // Figure out which city/state matches the input
+                /* Create a regex to match the input*/
+              const regex = new RegExp(wordToMatch, 'gi');
+              return regex.test(place.city) || regex.test(place.state);
+                //return place.city.match(regex) || place.state.match(regex);
+             // return place.city.includes(wordToMatch) || place.state.includes(wordToMatch);
+            });// This will filter out the cities array elements that matches the input
+        }
+        // Will be invoked when the input has been changed
+        function displayMatches() {
+            // console.log(this.value);
+            const matchArray = findMatches(this.value, cities);
+            console.log(matchArray);
+            /*Now we have received the data. Moving on to displaying the city, state and the population
+             * of the searched string. */
+            const html = matchArray.map(place => {
+                // To highlight the input string in the suggestions
+                const regex = new RegExp(this.value, 'gi');
+                const cityName = place.city.replace(regex, `<span class="hl">${this.value}</span>`);
+                const stateName = place.state.replace(regex, `<span class="hl"> ${this.value} </span>`);
+                return `<li>
+                <span class='name'> ${cityName} ${stateName} </span>
+                <span class="population"> ${numberWithCommas(place.population)} </span>
+            </li>`
+            }) // This will return an array, but we need it as a String. So use join
+                .join("");
+            suggestions.innerHTML = html;
+        }
+        function numberWithCommas(x) {
+            const regex = /\B(?=(\d{3})+(?!\d))/g;
+            return x.toString().replace(regex, ',');
+
+        }
+
+    const searchInput = document.querySelector('.search');
+    const suggestions = document.querySelector('.suggestions');
+
+    searchInput.addEventListener('change', displayMatches);
+    searchInput.addEventListener('keyup', displayMatches);
+    </script>
+</body>
+</html>
