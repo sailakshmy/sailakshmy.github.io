@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>HTML5 Canvas</title>
+</head>
+<body>
+    
+    <canvas id="draw" width="800" height="800"></canvas>
+    <style>
+        html,body{
+            margin: 0;
+
+        }
+    </style>
+    <script>
+        const canvas = document.querySelector("#draw");
+        /* canvas on web => sort of like MS Paint.
+         * You get a block of actual pixels and you have to draw on that.
+         * In HTMl, you don't draw directly on the canvas element in HTML. You draw 
+         * on something called the context.
+         * Context can be 2D or 3D(vide games and 3D rendering).*/
+        const ctx = canvas.getContext('2d');
+
+        //Resize the canvas to fit the window size
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        ctx.strokeStyle = '#BADA55'; // When you start draeing, there needs to be a color. We start with this one
+        ctx.lineJoin = 'round';// When a line meets another line, should it be sqaured off or round or something else at the corner. We choose round
+        ctx.lineCap = 'round';// When a line ends, should it be squared off or round or something else. We choose Round
+        ctx.lineWidth = 25; // This is basically the width of the line drawn
+        ctx.globalCompositeOperation = 'multiply'; // This basically tells us how to place a new image on an existing image
+        
+
+        let isDrawing = false; // Will be set to true when the mouse is clicked, and will be set to false only when the user lets go of the mouse
+        let lastX = 0;// x coordinate for the line
+        let lastY = 0;//Y coordinate for the line
+        let hue = 0; // This is to change the color of the line drawn
+        let direction = true;
+
+        // This will be called whenever I try to draw on the canvas
+        function draw(e) {
+            if (!isDrawing) // This will stop the function if the user is not holding the mouse down
+                return;
+            console.log(e);
+            // To start drawing
+            ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+            ctx.beginPath(); // begins a new path or resets the current path
+            ctx.moveTo(lastX, lastY); // creates a path starting from the value specified
+            ctx.lineTo(e.offsetX, e.offsetY);// to the current location of the mouse
+            ctx.stroke(); // Actually draws the line that you have specified with moveTo() and lineTo() methods
+            // After the line is drawn, update the X and Y coordinates to the last point point, so that the new line can be drawn from there
+            /*lastX = e.offsetX;
+            lastY = e.offsetY;*/
+            //The above 2 lines can be compressed to one
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+            hue++; // This will change the hue value and hence the line color will change everytime we start a new line
+            if (hue >= 360) {
+                hue = 0;// This is because hue in hsl usually takes value from 0 to 360
+            }
+            // Now if you want to limit the width of your line to 100
+            if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+                direction = !direction;
+            }
+
+            if (direction) {
+                ctx.lineWidth++;
+            }
+            else {
+                ctx.lineWidth--;
+            }
+        }
+
+        //Listen for Mouse move event on the canvas
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mousedown', (e) => {
+            isDrawing = true;
+            /*This will enable us to start drawing wherever we want it rather than at (0,0) all the time
+             * This will also help us draw multiple lines rather than one continuous line */
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        });
+        canvas.addEventListener('mouseup', () => isDrawing = false);
+        canvas.addEventListener('mouseout', () => isDrawing = false); // This is to handle events where the mouse is pressed down, but it has left the window.
+
+    </script>
+</body>
+</html>
