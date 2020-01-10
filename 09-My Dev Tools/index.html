@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Console Tricks!</title>
+</head>
+<body>
+    <p onclick="makeGreen()">xBREAKxDOWNx</p>
+    <script>
+        const dogs = [{ name: 'Snickers', age: 2 }, { name: 'hugo', age: 8 }];
+        /* To break on some element, right-click on gthat element in Chrome and select Break On */
+        function makeGreen() {
+            const p = document.querySelector('p');
+            p.style.color = '#BADA55';
+            p.style.fontSize = "50px";
+        }
+
+        // Console
+        // Regular
+        console.log("Hello");
+
+        //Interpolated
+        console.log("Hello! I am a %s String!", "poop");
+
+        // Styled
+        console.log("%c I am some great text", "font-size: 70px; color: #ffc600;");
+
+        // warning!
+        console.warn("Oh NO");
+
+        // Error :|
+        console.error("Oh No");
+
+        // Info
+        console.info("Crocodiles eat 3-4 people a year");
+
+        // Testing 
+        console.assert(2 === 1, " That is wrong!");// Will only run if the statement given as the first parameter is wrong
+        const p = document.querySelector("p");
+        console.assert(p.classList.contains('ouch'), " Wrong Selection!");
+        
+
+    // clearing
+        console.clear();// Clears the console
+
+        // Viewing DOM Elements
+        console.log(p);
+        console.dir(p); // allows user to view the properties and methods of the DOM elements
+    // Grouping together
+
+        dogs.forEach(dog => {
+            console.group(`${dog.name}`);// This will give a dropdownlist of all the elements in the array. If you want this to be collapsed by defaukt, use groupCollapsed, instead of Group
+            console.log(`This is ${dog.name}.`);
+            console.log(`${dog.name} is ${dog.age} years old.`);
+            console.log(`${dog.name} is ${dog.age * 7} dog years old.`);
+            console.groupEnd(`${dog.name}`);
+        });
+        // counting
+        console.count("end");// Will count the number of times a word r number or object is used
+
+        // timing
+        console.time("Fetching Data");
+        fetch("https://api.github.com/users/sailakshmy")
+            .then(data => data.json)
+            .then(data => {
+                console.timeEnd('Fetching Data');
+                console.log(data);
+            });
+
+        // table
+        console.table(dogs);// Take an array of objects. If each object has the same number of properties, then it will display it in a tabular format
+    </script>
+
+</body>
+</html>
