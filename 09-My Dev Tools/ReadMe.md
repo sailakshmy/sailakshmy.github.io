@@ -1,4 +1,4 @@
-This project deals with Dev and console tools and tricks
+This project deals with Dev and console tools and tricks.
 Console methods that are discussed in this are as follows
 1) console.log()
 2) Console.table()
