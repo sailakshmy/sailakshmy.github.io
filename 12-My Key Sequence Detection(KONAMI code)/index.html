@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Key Detection</title>
+    <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+    <script>
+        const pressed = [];
+        const secretCode = "wesbos";
+        window.addEventListener('keyup', (e) => {
+            console.log(e.key);
+            pressed.push(e.key);
+            pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);// -secretCode.length - 1 will take the length from the end, rather than the first
+            //console.log(pressed.length - secretCode.length);
+            // console.log(-secretCode.length - 1);
+            if (pressed.join("").includes(secretCode)) {
+                console.log("Found Key Sequence");
+                cornify_add();
+            }
+            console.log(pressed);
+        });
+    </script>
+   
+
+</body>
+</html>
