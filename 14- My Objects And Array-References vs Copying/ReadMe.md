@@ -19,4 +19,7 @@ of the 2 arrays will reflect in the other.
 	the values of the existing properties.
 	The problem with the above method is the above methods(for both arrays and objects) is that,
 	the copying is done only 1 level deep. This means that, if we have nested objects, the above
-	properties won't hold.
+	properties won't hold. To copy multiple levels, we have to use a clonedeep method. But, this
+	is not recommended.
+	2) Use JSON.parse(JSON.stringify()) - This method will first make the object a string and
+	then parse it into an object again.
