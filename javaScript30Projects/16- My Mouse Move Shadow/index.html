@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Mouse Shadow</title>
+</head>
+<body>
+    <div class="hero">
+        <h1 contenteditable>🔥WOAH!</h1>
+    </div>
+
+    <style>
+        html{
+            color: black;
+            font-family:sans-serif;
+        }
+
+        body{
+            margin: 0;
+        }
+
+        .hero{
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+        }
+
+        h1{
+            text-shadow: 10px 10px 0 rgba(0,0,0,1);
+            font-size: 100px;
+        }
+    </style>
+
+    <script>
+        const hero = document.querySelector('.hero');
+        const text = hero.querySelector('h1');
+        const walk = 200;// This value is to see how far the shadow is to be displayed
+
+        hero.addEventListener('mousemove', shadow);
+
+        function shadow(e) {
+            console.log(e);
+            const { offsetWidth: width, offsetHeight: height } = hero;
+            let { offsetX: x, offsetY: y } = e;//The offsetX and offsetY properties tell the position of the cursor
+            console.log(e.target);//Thing that the event is actually triggered on, this will be different
+            console.log(this);//Thing that you listen on- this will be 'hero' for us always
+           // console.log(x, y);
+            //console.log(e.target.offsetLeft, e.target.offsetTop);
+            if (this !== e.target) {
+                x = x + e.target.offsetLeft;
+                y = y + e.target.offsetTop;
+            }
+            //console.log(x, y);
+            console.log(width);
+            const xWalk = Math.round((x / width * walk) - walk / 2);
+            const yWalk = Math.round((y / height * walk) - walk / 2);
+
+            text.style.textShadow = `${xWalk}px ${yWalk}px 0 rgba(0,0,255,0.5),
+                                     ${yWalk}px ${xWalk}px 0 rgba(0,255,0,0.5),
+                                     ${xWalk * -1}px ${yWalk*-1}px 0 rgba(255,0,0,0.5),
+                                     ${yWalk*-1}px ${xWalk*-1}px 0 rgba(0,0,0,0.5)`;
+        }
+
+
+    </script>
+</body>
+</html>
